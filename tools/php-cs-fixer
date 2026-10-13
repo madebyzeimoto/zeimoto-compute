@@ -1,0 +1,11 @@
+#!/bin/sh
+# ==========================================================
+# Tooling :: PHP-CS-Fixer
+# ==========================================================
+#
+# Runs the host formatter with Herd's PHP 8.5.
+#
+# ==========================================================
+
+plugin_tools_dir=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd) || exit 1
+exec "$HOME/Library/Application Support/Herd/bin/php85" "$plugin_tools_dir/../../../../vendor/bin/php-cs-fixer" "$@"
