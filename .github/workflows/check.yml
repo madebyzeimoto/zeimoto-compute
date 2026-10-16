@@ -1,0 +1,23 @@
+# ==========================================================
+# CI :: Plugin Contracts
+# ==========================================================
+
+name: Plugin contracts
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  contracts:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.5"
+          extensions: gd, mbstring, intl, dom, zip
+          coverage: none
+      - run: composer install --prefer-dist --no-interaction
+      - run: composer test

@@ -142,3 +142,9 @@ plugin with:
 ```sh
 node tools/check-style.mjs --plugin site/plugins/zeimoto-compute
 ```
+
+## Behavior tests
+
+Run `composer install` and `composer test` from this repository. Tests boot Kirby
+with disposable runtime directories and never load project secrets or send real
+mail. The host kit can also run this suite with `composer test:plugins`.
