@@ -14,6 +14,7 @@ namespace Zeimoto\Compute;
 
 use Kirby\Cms\Page;
 use Kirby\Cms\Site;
+use Kirby\Cms\Structure;
 use Kirby\Content\Field;
 use Kirby\Toolkit\Obj;
 
@@ -32,8 +33,17 @@ final class Compute
     return $this->model instanceof Page ? $this->model->site() : $this->model;
   }
 
+  private function isLegalPage(): bool
+  {
+    return $this->model instanceof Page && in_array($this->model->intendedTemplate()->name(), ["legal", "policy"], true);
+  }
+
   public function title(): Field
   {
+    if ($this->isLegalPage()) {
+      return $this->model->title();
+    }
+
     return $this->model
       ->metadataTitle()
       ->or($this->model->title())
@@ -43,6 +53,10 @@ final class Compute
 
   public function description(): Field
   {
+    if ($this->isLegalPage()) {
+      return $this->site()->metadataDescription();
+    }
+
     return $this->model->metadataDescription()->or($this->site()->metadataDescription());
   }
 
@@ -60,11 +74,23 @@ final class Compute
 
   public function canonicalUrl(): string
   {
+    if ($this->isLegalPage()) {
+      return $this->model->url();
+    }
+
     return $this->model->metadataCanonicalUrl()->or($this->model->url())->value();
   }
 
   public function schemaType(): string
   {
+    if ($this->isLegalPage()) {
+      return "WebPage";
+    }
+
+    if ($this->model instanceof Page && $this->model->isHomePage()) {
+      return "HomePage";
+    }
+
     return $this->model->schemaType()->or("WebPage")->value();
   }
 
@@ -79,7 +105,9 @@ final class Compute
 
   public function opengraphImage(): Obj|null
   {
-    $file = $this->model->opengraphImage()->toFile() ?? $this->site()->opengraphImage()->toFile();
+    $file = $this->isLegalPage()
+      ? $this->site()->opengraphImage()->toFile()
+      : $this->model->opengraphImage()->toFile() ?? $this->site()->opengraphImage()->toFile();
 
     if ($file === null) {
       return null;
@@ -162,20 +190,14 @@ final class Compute
     return $this->entityType() === "person" ? "Person" : "Organization";
   }
 
-  private function socials(): iterable
+  private function socials(): Structure
   {
     return $this->site()->kirby()->collection("socials");
   }
 
   public function sameAs(): array
   {
-    $urls = [];
-
-    foreach ($this->socials() as $social) {
-      $urls[] = $social->url();
-    }
-
-    return $urls;
+    return $this->socials()->pluck("url");
   }
 
   public function faviconUrl(int $size): string|null

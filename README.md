@@ -61,7 +61,7 @@ page-bound instance. Identity and PWA methods always resolve the owning site.
 | `title()`, `description()`             | `Field`; metadata title falls back through model title, site metadata title, and site title; metadata description falls back to the site's metadata description                   |
 | `plainText(Field $field)`              | `string`; strips HTML, preserves block and line-break word boundaries, decodes entities, and normalizes whitespace                                                                |
 | `canonicalUrl()`                       | `string`; metadata canonical URL, falling back to the model URL                                                                                                                   |
-| `schemaType()`, `opengraphType()`      | `string`; schema type defaults to `WebPage`; Open Graph maps `Article` to `article`, `ProfilePage` to `profile`, and other types to `website`                                     |
+| `schemaType()`, `opengraphType()`      | `string`; home always resolves to `HomePage`; other schema types default to `WebPage`; Open Graph maps `Article` to `article`, `ProfilePage` to `profile`, and other types to `website`                                     |
 | `opengraphImage()`                     | `Obj` or `null`; model image falls back to site image and requests a 1200×630 crop; exposes `file`, `url`, actual `width` and `height`, and optional `alt`                        |
 | `lang()`, `locale()`                   | `string`; lowercase language and formatted `language_REGION`, defaulting to `en` and `en_US`; bare English maps to US and other bare codes use their uppercase language as region |
 | `entityType()`                         | `string`; site entity type, defaulting to `person`                                                                                                                                |
@@ -82,13 +82,17 @@ use `->html()` or `html()` for HTML, XML encoding for XML, and JSON encoding for
 JSON. Embedded JSON-LD must use flags that prevent a literal `</script>` from
 terminating its script element. Plain-text conversion is not output escaping.
 
+Legal and Policy pages always resolve their page title, site metadata description and sharing image,
+their own URL, and the `WebPage` schema type (`website` for Open Graph). Saved
+page metadata overrides are ignored. Legal pages, Policies, and their descendants are never indexable.
+
 ## Registered model methods
 
 Two methods intentionally remain on Kirby models:
 
 - `$page->isIndexable(): bool` returns false when site indexing is disabled or unset,
-  the page uses the `system` template, the page disables indexing, or an
-  ancestor disables child indexing.
+  the page uses the `system`, `legal`, or `policy` template, the page disables indexing,
+  an ancestor uses the `legal` or `policy` template, or an ancestor disables child indexing.
 - `$site->computedIndexingStatusLabel(): string` returns `Enabled` or `Disabled`
   for the Panel blueprint query `{{ site.computedIndexingStatusLabel }}`; an
   unset site toggle reads as `Disabled`.

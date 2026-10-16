@@ -8,6 +8,22 @@
   "settings": {
     /* Workspace */
     "npm.packageManager": "npm",
+    "workbench.colorTheme": "Dracula Theme",
+
+    /* Editor UI */
+    "editor.fontSize": 14,
+    "editor.wordWrap": "on",
+    "editor.renderWhitespace": "all",
+    "editor.cursorBlinking": "smooth",
+    "editor.cursorSmoothCaretAnimation": "on",
+    "editor.minimap.enabled": false,
+    "editor.codeLens": false,
+    "editor.hover.enabled": "off",
+    "editor.inlayHints.enabled": "off",
+    "editor.parameterHints.enabled": false,
+    "editor.suggest.snippetsPreventQuickSuggestions": false,
+    "explorer.compactFolders": false,
+    "html.suggest.html5": false,
 
     /* Formatting */
     "editor.defaultFormatter": "esbenp.prettier-vscode",
@@ -25,6 +41,18 @@
     "files.insertFinalNewline": true,
     "files.trimFinalNewlines": true,
     "files.trimTrailingWhitespace": true,
+
+    "files.exclude": {
+      "**/.gitkeep": true,
+    },
+
+    /* Search */
+    "search.exclude": {
+      "**/node_modules": true,
+      "**/media": true,
+      "**/dist": true,
+      "**/site/cache": true,
+    },
 
     /* Prettier */
     "prettier.requireConfig": true,
@@ -62,6 +90,7 @@
     },
 
     /* Intelephense */
+    "intelephense.diagnostics.undefinedVariables": "off",
     "intelephense.environment.includePaths": ["../../../kirby", "../../../vendor"],
 
     "intelephense.files.exclude": [
@@ -73,5 +102,8 @@
       "**/site/sessions/**",
       "**/site/accounts/**",
     ],
+
+    /* Git */
+    "git.ignoreLimitWarning": true,
   },
 }
