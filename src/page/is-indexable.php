@@ -22,7 +22,7 @@ return [
       return false;
     }
     foreach ($this->parents() as $parent) {
-      if (in_array($parent->intendedTemplate()->name(), ["legal", "policy"], true) || !$parent->indexingChildrenStatus()->toBool(true)) {
+      if (in_array($parent->intendedTemplate()->name(), ["system", "legal", "policy"], true) || !$parent->indexingChildrenStatus()->toBool(true)) {
         return false;
       }
     }

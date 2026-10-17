@@ -84,7 +84,7 @@ terminating its script element. Plain-text conversion is not output escaping.
 
 Legal and Policy pages always resolve their page title, site metadata description and sharing image,
 their own URL, and the `WebPage` schema type (`website` for Open Graph). Saved
-page metadata overrides are ignored. Legal pages, Policies, and their descendants are never indexable.
+page metadata overrides are ignored. System pages, Legal pages, Policies, and their descendants are never indexable.
 
 ## Registered model methods
 
@@ -92,7 +92,7 @@ Two methods intentionally remain on Kirby models:
 
 - `$page->isIndexable(): bool` returns false when site indexing is disabled or unset,
   the page uses the `system`, `legal`, or `policy` template, the page disables indexing,
-  an ancestor uses the `legal` or `policy` template, or an ancestor disables child indexing.
+  an ancestor uses the `system`, `legal`, or `policy` template, or an ancestor disables child indexing.
 - `$site->computedIndexingStatusLabel(): string` returns `Enabled` or `Disabled`
   for the Panel blueprint query `{{ site.computedIndexingStatusLabel }}`; an
   unset site toggle reads as `Disabled`.

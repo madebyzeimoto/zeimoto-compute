@@ -50,6 +50,23 @@ final class ContractTest extends PluginTestCase
     self::assertSame("Hello world", compute($page)->plainText(new \Kirby\Content\Field($page, "text", "<p>Hello</p><p>world</p>")));
   }
 
+  public function testSystemDescendantsCannotEnableIndexing(): void
+  {
+    $this->app(site: ["content" => ["indexingStatus" => "true"]]);
+    $system = new Page(["slug" => "system", "template" => "system", "content" => [
+      "indexingStatus" => "true", "indexingChildrenStatus" => "true",
+    ]]);
+    $child = new Page(["slug" => "child", "parent" => $system, "content" => [
+      "indexingStatus" => "true", "indexingChildrenStatus" => "true",
+    ]]);
+    $grandchild = new Page(["slug" => "grandchild", "parent" => $child, "content" => ["indexingStatus" => "true"]]);
+
+    self::assertFalse($system->isIndexable());
+    self::assertFalse($child->isIndexable());
+    self::assertFalse($grandchild->isIndexable());
+    self::assertTrue((new Page(["slug" => "ordinary", "content" => ["indexingStatus" => "true"]]))->isIndexable());
+  }
+
   public function testMissingSiteIndexingDisablesOrdinaryPages(): void
   {
     $app = $this->app();
