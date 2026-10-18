@@ -4,7 +4,7 @@
 // ==========================================================
 //
 // Resolves whether a page may be indexed from site, page,
-// template, and ancestor settings.
+// template, ancestor, and deployment settings.
 //
 // ==========================================================
 
@@ -12,7 +12,7 @@ declare(strict_types=1);
 
 return [
   "isIndexable" => function (): bool {
-    if (!$this->site()->indexingStatus()->toBool()) {
+    if (!$this->kirby()->option("zeimoto.compute.indexing") || !$this->site()->indexingStatus()->toBool()) {
       return false;
     }
     if (in_array($this->intendedTemplate()->name(), ["system", "legal", "policy"], true)) {

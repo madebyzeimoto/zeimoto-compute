@@ -12,6 +12,6 @@ declare(strict_types=1);
 
 return [
   "computedIndexingStatusLabel" => function (): string {
-    return $this->indexingStatus()->toBool() ? "Enabled" : "Disabled";
+    return $this->kirby()->option("zeimoto.compute.indexing") && $this->indexingStatus()->toBool() ? "Enabled" : "Disabled";
   },
 ];

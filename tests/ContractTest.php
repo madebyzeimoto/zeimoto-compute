@@ -67,6 +67,18 @@ final class ContractTest extends PluginTestCase
     self::assertTrue((new Page(["slug" => "ordinary", "content" => ["indexingStatus" => "true"]]))->isIndexable());
   }
 
+  public function testDeploymentDisablesIndexingForEveryDescendant(): void
+  {
+    $app = $this->app(options: ["zeimoto.compute.indexing" => false], site: ["content" => ["indexingStatus" => "true"]]);
+    $parent = new Page(["slug" => "parent", "content" => ["indexingStatus" => "true", "indexingChildrenStatus" => "true"]]);
+    $child = new Page(["slug" => "child", "parent" => $parent, "content" => ["indexingStatus" => "true", "indexingChildrenStatus" => "true"]]);
+    $grandchild = new Page(["slug" => "grandchild", "parent" => $child, "content" => ["indexingStatus" => "true"]]);
+    foreach ([$parent, $child, $grandchild] as $page) {
+      self::assertFalse($page->isIndexable());
+    }
+    self::assertSame("Disabled", $app->site()->computedIndexingStatusLabel());
+  }
+
   public function testMissingSiteIndexingDisablesOrdinaryPages(): void
   {
     $app = $this->app();

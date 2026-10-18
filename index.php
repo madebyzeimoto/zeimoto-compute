@@ -35,6 +35,9 @@ if (function_exists("compute") === false) {
 }
 
 Kirby::plugin("zeimoto/compute", [
+  "options" => [
+    "indexing" => true,
+  ],
   "siteMethods" => $loadMethods("site"),
   "pageMethods" => $loadMethods("page"),
   "hooks" => [

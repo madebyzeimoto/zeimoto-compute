@@ -90,12 +90,12 @@ page metadata overrides are ignored. System pages, Legal pages, Policies, and th
 
 Two methods intentionally remain on Kirby models:
 
-- `$page->isIndexable(): bool` returns false when site indexing is disabled or unset,
+- `$page->isIndexable(): bool` returns false when `zeimoto.compute.indexing` is false, site indexing is disabled or unset,
   the page uses the `system`, `legal`, or `policy` template, the page disables indexing,
   an ancestor uses the `system`, `legal`, or `policy` template, or an ancestor disables child indexing.
 - `$site->computedIndexingStatusLabel(): string` returns `Enabled` or `Disabled`
   for the Panel blueprint query `{{ site.computedIndexingStatusLabel }}`; an
-  unset site toggle reads as `Disabled`.
+  unset site toggle or disabled deployment indexing reads as `Disabled`.
 
 Other derived values belong on `Compute`. Direct field reads and one-off Kirby
 conversions stay with their consumers when no derived domain value is involved.
@@ -103,7 +103,12 @@ conversions stay with their consumers when no derived domain value is involved.
 ## Integration requirements
 
 The plugin uses Kirby's page/site models, content fields, current language, and
-image processing. It declares no plugin options and needs no frontend build.
+image processing. It needs no frontend build.
+
+The `zeimoto.compute.indexing` option defaults to `true`, allowing authored
+indexing rules to apply. Setting it to `false` forbids indexing for every page
+and descendant regardless of saved site/page toggles. The kit sets it to false
+in staging and uses it in its robots route too.
 The host owns the content blueprints, routes, and rendering snippets; this plugin
 does not register those surfaces.
 
