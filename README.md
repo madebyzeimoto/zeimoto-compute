@@ -112,8 +112,8 @@ in staging and uses it in its robots route too.
 The host owns the content blueprints, routes, and rendering snippets; this plugin
 does not register those surfaces.
 
-`sameAs()` and `twitterHandle()` require the host's named `socials` collection.
-The kit supplies it in `site/collections/socials.php`. Manual integrations must
+`sameAs()` and `twitterHandle()` require the named `socials` collection.
+The kit supplies it through `zeimoto/socials`. Manual integrations must
 register an iterable collection whose entries provide `url()`, `platform()`, and
 `username()`; X entries use platform `x`. An empty collection represents no
 configured profiles. The plugin does not provide a fallback for a missing collection.
