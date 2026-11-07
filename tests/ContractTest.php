@@ -50,6 +50,14 @@ final class ContractTest extends PluginTestCase
     self::assertSame("Hello world", compute($page)->plainText(new \Kirby\Content\Field($page, "text", "<p>Hello</p><p>world</p>")));
   }
 
+  public function testSocialMetadataIsEmptyWithoutTheSocialsPlugin(): void
+  {
+    $this->app(site: ["content" => ["title" => "Site"]]);
+    $compute = compute(new Page(["slug" => "ordinary"]));
+    self::assertSame([], $compute->sameAs());
+    self::assertNull($compute->twitterHandle());
+  }
+
   public function testSystemDescendantsCannotEnableIndexing(): void
   {
     $this->app(site: ["content" => ["indexingStatus" => "true"]]);

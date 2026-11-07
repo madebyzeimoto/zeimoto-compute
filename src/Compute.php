@@ -16,6 +16,7 @@ use Kirby\Cms\Page;
 use Kirby\Cms\Site;
 use Kirby\Cms\Structure;
 use Kirby\Content\Field;
+use Kirby\Exception\NotFoundException;
 use Kirby\Toolkit\Obj;
 
 final class Compute
@@ -190,9 +191,14 @@ final class Compute
     return $this->entityType() === "person" ? "Person" : "Organization";
   }
 
+  // zeimoto-socials is optional; without it there are no profiles to describe.
   private function socials(): Structure
   {
-    return $this->site()->kirby()->collection("socials");
+    try {
+      return $this->site()->kirby()->collection("socials");
+    } catch (NotFoundException) {
+      return new Structure();
+    }
   }
 
   public function sameAs(): array
